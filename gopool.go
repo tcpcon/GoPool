@@ -18,6 +18,7 @@ func Pooler[V comparable](p PoolerParams[V]) {
 
 	for !done {
 		if items.Len() == 0 {
+			// TODO: Improve this waste of resources, try convert system to channel-based
 			continue
 		}
 
