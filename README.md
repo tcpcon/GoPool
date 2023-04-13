@@ -23,7 +23,3 @@ gopool.Pooler(gopool.PoolerParams[int]{Slice: []int{1, 2, 3, 4, 5, 6}, WorkerFn:
 - `ErrorFn`, a function that must **not** panic that should log any errors or panics that are caught from the `WorkerFn`
 - `MaxRoutines`, is the max concurrent goroutines for the worker pool
 - `MaxErrors`, is the maximum amount of errors for an item in a `WorkerFn`
-
-## Notices
-- `Slice` must not contain duplicates, any duplicates will be automatically stripped out
-- Type used must be comparable, if you would like to use a struct, i recommened passing a field of unique identifiers from the structs as the `Slice` and then looking up the struct based on the unique value
