@@ -1,6 +1,6 @@
 package gopool
 
-type PoolerParams[V any] struct {
+type PoolerParams[V comparable] struct {
 	Slice                  []V
 	WorkerFn               func(V) error
 	ErrorFn                func(error, bool)
