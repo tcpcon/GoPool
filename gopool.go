@@ -2,10 +2,10 @@ package gopool
 
 import "errors"
 
-func Pooler[V any](p PoolerParams[V]) {
+func Pooler[V comparable](p PoolerParams[V]) {
 	var (
 		items    = transform(p.Slice)
-		errs     = make(map[any]int)
+		errs     = make(map[V]int)
 		sem      = make(chan int, p.MaxRoutines)
 
 		finished int
@@ -19,7 +19,7 @@ func Pooler[V any](p PoolerParams[V]) {
 
 		sem <- 1
 
-		go func(item any) {
+		go func(item V) {
 			defer func() {
 				<-sem
 				done = len(p.Slice) <= finished
@@ -35,7 +35,7 @@ func Pooler[V any](p PoolerParams[V]) {
 					}
 				}()
 
-				e = p.WorkerFn(item.(V))
+				e = p.WorkerFn(item)
 				return
 
 			}(); err != nil {
@@ -53,6 +53,6 @@ func Pooler[V any](p PoolerParams[V]) {
 				finished++
 			}
 
-		}(items.Pop())
+		}(items.Pop().(V))
 	}
 }
