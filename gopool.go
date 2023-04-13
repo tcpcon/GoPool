@@ -43,7 +43,7 @@ func Pooler[V comparable](p PoolerParams[V]) {
 				return
 
 			}(); err != nil {
-				incrementMap(&mu, errs, item)
+				incMap(&mu, errs, item)
 
 				p.ErrorFn(err, panicked)
 
