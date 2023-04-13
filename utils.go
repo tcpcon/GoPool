@@ -14,7 +14,7 @@ func readMap(mu *sync.Mutex, m map[Data]int, d Data) int {
 	return m[d]
 }
 
-func incrementMap(mu *sync.Mutex, m map[Data]int, d Data) {
+func incMap(mu *sync.Mutex, m map[Data]int, d Data) {
 	mu.Lock()
 	defer mu.Unlock()
 
