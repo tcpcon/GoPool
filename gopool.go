@@ -28,7 +28,7 @@ func Pooler[V comparable](p PoolerParams[V]) {
 			var panicked bool
 
 			if err := func() (e error) {
-				defer func (){
+				defer func () {
 					if r := recover(); r != nil {
 						e = errors.New(r.(string))
 						panicked = true
