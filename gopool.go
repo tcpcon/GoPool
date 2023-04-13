@@ -1,11 +1,15 @@
 package gopool
 
-import "errors"
+import (
+	"sync"
+	"errors"
+)
 
 func Pooler[V comparable](p PoolerParams[V]) {
 	var (
 		items    = transform(p.Slice)
-		errs     = make(map[V]int)
+		mu       = sync.Mutex{}
+		errs     = make(map[Data]int)
 		sem      = make(chan int, p.MaxRoutines)
 
 		finished int
@@ -19,7 +23,7 @@ func Pooler[V comparable](p PoolerParams[V]) {
 
 		sem <- 1
 
-		go func(item V) {
+		go func(item Data) {
 			defer func() {
 				<-sem
 				done = len(p.Slice) <= finished
@@ -35,15 +39,15 @@ func Pooler[V comparable](p PoolerParams[V]) {
 					}
 				}()
 
-				e = p.WorkerFn(item)
+				e = p.WorkerFn(item.data.(V))
 				return
 
 			}(); err != nil {
-				errs[item]++
+				incrementMap(&mu, errs, item)
 
 				p.ErrorFn(err, panicked)
 
-				if !(errs[item] >= p.MaxErrors && p.MaxErrors != -1) {
+				if !(readMap(&mu, errs, item) >= p.MaxErrors && p.MaxErrors != -1) {
 					items.Push(item)
 				} else {
 					finished++
@@ -53,6 +57,6 @@ func Pooler[V comparable](p PoolerParams[V]) {
 				finished++
 			}
 
-		}(items.Pop().(V))
+		}(items.Pop().(Data))
 	}
 }
