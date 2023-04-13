@@ -1,30 +1,30 @@
 package gopool
 
-import "github.com/golang-collections/collections/stack"
+import (
+	"sync"
 
-func transform[V comparable](slice []V) stack.Stack {
-	var (
-		new  []V
-		stck stack.Stack
-	)
+	"github.com/google/uuid"
+	"github.com/golang-collections/collections/stack"
+)
 
-	for _, v1 := range slice {
-		if !func() bool {
-			for _, v2 := range new {
-				if v1 == v2 {
-					return true
-				}
-			}
+func readMap(mu *sync.Mutex, m map[Data]int, d Data) int {
+	mu.Lock()
+	defer mu.Unlock()
 
-			return false
-		}() {
-			new = append(new, v1)
-		}
+	return m[d]
+}
+
+func incrementMap(mu *sync.Mutex, m map[Data]int, d Data) {
+	mu.Lock()
+	defer mu.Unlock()
+
+	m[d]++
+}
+
+func transform[V comparable](slice []V) (stck stack.Stack) {
+	for i := len(slice) - 1; i >= 0; i-- {
+		stck.Push(Data{uuid: uuid.New().String(), data: slice[i]})
 	}
 
-	for i := len(new) - 1; i >= 0; i-- {
-		stck.Push(new[i])
-	}
-
-	return stck
+	return
 }
