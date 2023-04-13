@@ -10,7 +10,7 @@ func transform[V comparable](slice []V) stack.Stack {
 
 	for _, v1 := range slice {
 		if !func() bool {
-			for _, v2 := range slice {
+			for _, v2 := range new {
 				if v1 == v2 {
 					return true
 				}
