@@ -10,9 +10,9 @@ gopool.Pooler(gopool.PoolerParams[int]{Slice: []int{1, 2, 3, 4, 5, 6}, WorkerFn:
 		  
 }, ErrorFn: func(err error, isPanic bool) {
 	if isPanic {
-		log.Error("Caught Panic: %s", err).Msg().File()
+		log.Error("Caught Panic: %s", err).Full()
 	} else {
-		log.Error(err.Error()).Msg().File()
+		log.Error(err.Error()).Msg()
 	}
 }, MaxRoutines: 2, MaxErrors: 1})
 ```
