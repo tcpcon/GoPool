@@ -8,7 +8,7 @@ gopool.Pooler(gopool.PoolerParams[int]{Slice: []int{1, 2, 3, 4, 5, 6}, WorkerFn:
 	  
 	return nil
 		  
-}, ErrorFn: func(err error, isPanic bool) {
+}, ErrorFn: func(item int, err error, isPanic bool) {
 	if isPanic {
 		log.Error("Caught Panic: %s", err).Full()
 	} else {
