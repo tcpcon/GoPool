@@ -2,6 +2,7 @@ package gopool
 
 import (
 	"sync"
+	"time"
 	"errors"
 )
 
@@ -18,7 +19,7 @@ func Pooler[V comparable](p PoolerParams[V]) {
 
 	for !done {
 		if items.Len() == 0 {
-			// TODO: Improve this waste of resources, try convert system to channel-based
+			time.Sleep(5 * time.Millisecond)
 			continue
 		}
 
