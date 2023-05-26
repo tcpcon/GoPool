@@ -35,7 +35,14 @@ func Pooler[V comparable](p PoolerParams[V]) {
 			if err := func() (e error) {
 				defer func () {
 					if r := recover(); r != nil {
-						e = errors.New(r.(string))
+						if w, ok := r.(string); ok {
+							e = errors.New(w)
+						} else if w, ok := r.(error); ok {
+							e = errors.New(w.Error())
+						} else {
+							e = errors.New("Unknown panic")
+						}
+						
 						panicked = true
 					}
 				}()
