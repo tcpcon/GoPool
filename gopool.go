@@ -55,7 +55,7 @@ func Pooler[V comparable](p PoolerParams[V]) {
 			}(); err != nil {
 				incMap(&mu, errs, item)
 
-				p.ErrorFn(item, err, panicked)
+				p.ErrorFn(item.data.(V), err, panicked)
 
 				if !(readMap(&mu, errs, item) >= p.MaxErrors && p.MaxErrors != -1) {
 					items.Push(item)
