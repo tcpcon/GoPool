@@ -4,7 +4,7 @@ type (
 	PoolerParams[V comparable] struct {
 		Slice                  []V
 		WorkerFn               func(V) error
-		ErrorFn                func(error, bool)
+		ErrorFn                func(V, error, bool)
 		MaxRoutines, MaxErrors int
 	}
 
